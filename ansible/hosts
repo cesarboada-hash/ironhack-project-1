@@ -1,0 +1,12 @@
+[frontend]
+frontend ansible_host=15.228.101.140
+
+[backend]
+backend ansible_host=10.0.2.181
+
+[db]
+db ansible_host=10.0.3.12
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/latinteam-saopaulo.pem
