@@ -1,5 +1,5 @@
 [frontend]
-frontend ansible_host=15.228.101.140
+frontend ansible_host=15.228.237.218
 
 [backend]
 backend ansible_host=10.0.2.181
