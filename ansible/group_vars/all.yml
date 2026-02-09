@@ -1,0 +1,15 @@
+---
+# group_vars/all.yml
+
+docker_registry: "cesarboada"
+vote_image:   "{{ docker_registry }}/vote:latest"
+result_image: "{{ docker_registry }}/result:latest"
+worker_image: "{{ docker_registry }}/worker:latest"
+
+postgres_user:     "postgres"
+postgres_password: "postgres"          # ¡cámbialo en producción!
+postgres_db:       "votes"
+
+# Estas variables las puedes definir aquí o pasarlas desde terraform output
+backend_private_ip: "10.0.2.181"       # ← CAMBIA POR LA IP PRIVADA REAL
+db_private_ip:      "10.0.3.12"       # ← CAMBIA POR LA IP PRIVADA REAL
