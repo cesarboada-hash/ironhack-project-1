@@ -136,12 +136,6 @@
       when: "'db' in group_names"
 
   # ────────────────────────────────────────────────
-  # Volúmenes nombrados (persistencia de datos)
-  # ────────────────────────────────────────────────
-  volumes:
-    postgres_data:
-
-  # ────────────────────────────────────────────────
   # Mensaje final para verificación
   # ────────────────────────────────────────────────
   post_tasks:

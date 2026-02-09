@@ -1,11 +1,11 @@
 [frontend]
-frontend-server ansible_host=15.228.237.218
+frontend-instance-1 ansible_host=15.228.237.218
 
 [backend]
-backend-server ansible_host=10.0.2.181
+backend-instance-1 ansible_host=10.0.2.181
 
 [db]
-db-server ansible_host=10.0.3.12
+db-instance-1 ansible_host=10.0.3.12
 
 [all:vars]
 ansible_user=ubuntu
