@@ -37,8 +37,15 @@ def hello():
         redis = get_redis()
         vote = request.form['vote']
         app.logger.info('Received vote for %s', vote)
-        data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+
+        # Mapeo para que coincida con lo que espera el Worker
+        if vote == 'a':
+            vote = 'cats'
+        elif vote == 'b':
+            vote = 'dogs'
+
+        redis.incr(vote)
+        app.logger.info('Vote %s incremented successfully', vote)
 
     resp = make_response(render_template(
         'index.html',
