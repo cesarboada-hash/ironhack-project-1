@@ -35,7 +35,6 @@
         groups: docker
         append: yes
 
-    # Reinicio de sesión para aplicar grupo docker (opcional pero recomendado)
     - name: Reiniciar sesión del usuario para aplicar cambios de grupo
       ansible.builtin.command: whoami
       changed_when: false
@@ -70,9 +69,8 @@
         restart_policy: unless-stopped
         ports:
           - "8080:80"
-        env:
-          REDIS_HOST: "{{ backend_private_ip }}"
-          REDIS_PORT: "6379"
+        etc_hosts:
+          redis: "{{ backend_private_ip }}"   # Formato dict correcto
       when: "'frontend' in group_names"
 
     - name: Desplegar Result (frontend)
@@ -83,12 +81,8 @@
         restart_policy: unless-stopped
         ports:
           - "8081:80"
-        env:
-          POSTGRES_HOST: "{{ db_private_ip }}"
-          POSTGRES_PORT: "5432"
-          POSTGRES_USER: "{{ postgres_user }}"
-          POSTGRES_PASSWORD: "{{ postgres_password }}"
-          POSTGRES_DB: "{{ postgres_db }}"
+        etc_hosts:
+          db: "{{ db_private_ip }}"           # Formato dict correcto
       when: "'frontend' in group_names"
 
     # ────────────────────────────────────────────────
@@ -101,7 +95,7 @@
         state: started
         restart_policy: unless-stopped
         ports:
-          - "6379:6379"   # ← Añade esto (mapea 6379 del contenedor al 6379 del host)
+          - "6379:6379"
         command: redis-server --bind 0.0.0.0 --protected-mode no
       when: "'backend' in group_names"
 
@@ -111,14 +105,9 @@
         image: "{{ worker_image }}"
         state: started
         restart_policy: unless-stopped
-        env:
-          REDIS_HOST: "localhost"
-          REDIS_PORT: "6379"
-          DB_HOST: "{{ db_private_ip }}"
-          DB_PORT: "5432"
-          DB_USERNAME: "{{ postgres_user }}"
-          DB_PASSWORD: "{{ postgres_password }}"
-          DB_NAME: "{{ postgres_db }}"
+        etc_hosts:
+          redis: "{{ backend_private_ip }}"
+          db:   "{{ db_private_ip }}"         # Formato dict correcto (múltiples entradas)
       when: "'backend' in group_names"
 
     # ────────────────────────────────────────────────
@@ -140,24 +129,24 @@
           - postgres_data:/var/lib/postgresql/data
       when: "'db' in group_names"
 
-  # ────────────────────────────────────────────────
-  # Mensaje final para verificación
-  # ────────────────────────────────────────────────
   post_tasks:
     - name: Mensaje de finalización del despliegue
       ansible.builtin.debug:
         msg: |
           ==================================================
-          Despliegue completado en todas las instancias.
-          
+          Despliegue completado.
+
           Accede a:
-            Vote:   http://{{ hostvars['frontend-instance-1']['ansible_host'] }}:8080
-            Result: http://{{ hostvars['frontend-instance-1']['ansible_host'] }}:8081
-          
-          Verifica logs si algo no funciona:
-            ssh frontend-instance-1 "docker logs vote"
-            ssh frontend-instance-1 "docker logs result"
-            ssh backend-instance-1  "docker logs worker"
-            ssh backend-instance-1  "docker logs redis"
-            ssh db-instance-1       "docker logs postgres"
+            → Vote:   http://{{ hostvars['frontend-instance-1']['ansible_host'] }}:8080
+            → Result: http://{{ hostvars['frontend-instance-1']['ansible_host'] }}:8081
+
+          Verifica:
+          1. Vota varias veces en :8080
+          2. Espera 10-40 segundos
+          3. Recarga :8081 → deberían cambiar los %
+
+          Debug:
+            docker logs worker   # busca errores de conexión a redis o db
+            docker logs vote
+            docker exec -it redis redis-cli KEYS "*"   # ¿aparecen votos?
           ==================================================
