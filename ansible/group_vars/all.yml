@@ -2,7 +2,8 @@
 # group_vars/all.yml
 
 docker_registry: "cesarboada"
-vote_image:   "{{ docker_registry }}/vote:latest"
+
+vote_image: "{{ docker_registry }}/vote:latest"         
 result_image: "{{ docker_registry }}/result:latest"
 worker_image: "{{ docker_registry }}/worker:latest"
 
