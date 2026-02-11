@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # IAM Role para CloudWatch
 resource "aws_iam_role" "ec2_cloudwatch_role" {
   name = "${var.project_name}-ec2-cloudwatch-role"
@@ -35,6 +36,17 @@ resource "aws_instance" "vote_result" {
   vpc_security_group_ids      = [var.vote_result_sg_id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
+=======
+# Instance A - Vote + Result (Public Subnet - Bastion Host)
+resource "aws_instance" "vote_result" {
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  subnet_id              = var.public_subnet_id
+  vpc_security_group_ids = [var.vote_result_sg_id]
+
+  associate_public_ip_address = true
+>>>>>>> origin/main
 
   tags = {
     Name = "${var.project_name}-frontend"
@@ -58,7 +70,10 @@ resource "aws_instance" "redis_worker" {
   key_name               = var.key_name
   subnet_id              = var.private_subnet_redis_id
   vpc_security_group_ids = [var.redis_worker_sg_id]
+<<<<<<< HEAD
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
+=======
+>>>>>>> origin/main
 
   tags = {
     Name = "${var.project_name}-backend"
@@ -82,7 +97,10 @@ resource "aws_instance" "postgres" {
   key_name               = var.key_name
   subnet_id              = var.private_subnet_db_id
   vpc_security_group_ids = [var.postgres_sg_id]
+<<<<<<< HEAD
   iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
+=======
+>>>>>>> origin/main
 
   tags = {
     Name = "${var.project_name}-database"

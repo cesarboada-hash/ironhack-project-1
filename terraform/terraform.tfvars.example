@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AWS Configuration
 aws_region = "sa-east-1"
 
@@ -12,3 +13,19 @@ allowed_ssh_ips = [
 ]
 
 availability_zone = "sa-east-1a"
+=======
+# AWS Configuration
+aws_region = "sa-east-1"
+
+# SSH Key - Create this key pair in AWS first
+key_name = "your-keypair-name"  # CHANGE THIS
+
+# Your IP for SSH access
+# Get your IP with: curl ifconfig.me
+allowed_ssh_ips = [
+    "YOUR_IP_HERE/32",      # Your IP
+    "TEAMMATE_IP_HERE/32"   # Teammate IP (optional)
+]
+
+availability_zone = "sa-east-1a"
+>>>>>>> origin/main

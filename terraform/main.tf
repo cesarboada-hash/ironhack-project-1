@@ -49,6 +49,7 @@ module "compute" {
   redis_worker_sg_id       = module.security_groups.redis_worker_sg_id
   postgres_sg_id           = module.security_groups.postgres_sg_id
   project_name             = var.project_name
+<<<<<<< HEAD
 }
 
 module "cloudwatch" {
@@ -60,3 +61,6 @@ module "cloudwatch" {
   db_instance_id       = module.compute.postgres_instance_id
 }
 
+=======
+}
+>>>>>>> origin/main
