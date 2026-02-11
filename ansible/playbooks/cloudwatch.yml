@@ -1,0 +1,37 @@
+--- 
+- name: Install and configure CloudWatch Agent
+  hosts: ec2_instances
+  become: yes
+
+  tasks:
+    - name: Detect architecture
+      set_fact:
+        arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+    - name: Download agent based on architecture
+      get_url:
+        url: "https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/{{ arch }}/latest/amazon-cloudwatch-agent.deb"
+        dest: /tmp/amazon-cloudwatch-agent.deb
+
+    - name: Install agent
+      apt:
+        deb: /tmp/amazon-cloudwatch-agent.deb
+
+    - name: Copy configuration file
+      copy:
+        src: files/cloudwatch-config.json
+        dest: /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+
+    - name: Start agent with configuration
+      shell: |
+        /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+          -a fetch-config \
+          -m ec2 \
+          -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json \
+          -s
+
+    - name: Enable service on startup
+      systemd:
+        name: amazon-cloudwatch-agent
+        enabled: yes
+        state: started

@@ -50,3 +50,13 @@ module "compute" {
   postgres_sg_id           = module.security_groups.postgres_sg_id
   project_name             = var.project_name
 }
+
+module "cloudwatch" {
+  source = "./modules/cloudwatch"
+  project_name         = var.project_name
+  alert_email          = var.alert_email
+  frontend_instance_id = module.compute.vote_result_instance_id
+  backend_instance_id  = module.compute.redis_worker_instance_id
+  db_instance_id       = module.compute.postgres_instance_id
+}
+

@@ -15,3 +15,8 @@ ansible_ssh_common_args='-o ProxyJump=frontend-instance-1'
 
 [db:vars]
 ansible_ssh_common_args='-o ProxyJump=frontend-instance-1'
+
+[ec2_instances:children]
+frontend
+backend
+db
