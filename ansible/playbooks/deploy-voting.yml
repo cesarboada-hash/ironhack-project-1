@@ -124,7 +124,8 @@
         env:
           POSTGRES_USER: "{{ postgres_user }}"
           POSTGRES_PASSWORD: "{{ postgres_password }}"
-          POSTGRES_DB: "{{ postgres_db }}"
+          POSTGRES_DB: "votes"
+          # POSTGRES_DB: "{{ postgres_db }}"
         volumes:
           - postgres_data:/var/lib/postgresql/data
       when: "'db' in group_names"
