@@ -54,4 +54,12 @@ variable "key_name" {
 variable "allowed_ssh_ips" {
   description = "List of IPs allowed for SSH access (format: [\"x.x.x.x/32\", \"y.y.y.y/32\"])"
   type        = list(string)
+<<<<<<< HEAD
 }
+variable "alert_email" {
+  description = "Email to receive CloudWatch alerts"
+  type        = string
+}
+=======
+}
+>>>>>>> origin/main
