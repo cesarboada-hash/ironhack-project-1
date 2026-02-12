@@ -5,7 +5,7 @@
   gather_facts: yes
 
   vars_files:
-    - ../../group_vars/all.yml   # ajusta la ruta si es necesario: ./group_vars/all.yml
+    - ../../group_vars/all.yml  
 
   tasks:
     # ────────────────────────────────────────────────
@@ -112,7 +112,7 @@
         state: started
         restart_policy: unless-stopped
         env:
-          REDIS_HOST: "localhost"
+          REDIS_HOST: "redis"
           REDIS_PORT: "6379"
           DB_HOST: "{{ db_private_ip }}"
           DB_PORT: "5432"
