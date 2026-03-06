@@ -5,7 +5,7 @@
   gather_facts: yes
 
   vars_files:
-    - ../../group_vars/all.yml   # ajusta la ruta si es necesario: ./group_vars/all.yml
+    - ../../group_vars/all.yml  
 
   tasks:
     # ────────────────────────────────────────────────
@@ -105,9 +105,14 @@
         image: "{{ worker_image }}"
         state: started
         restart_policy: unless-stopped
-        etc_hosts:
-          redis: "{{ backend_private_ip }}"
-          db:   "{{ db_private_ip }}"         # Formato dict correcto (múltiples entradas)
+        env:
+          REDIS_HOST: "redis"
+          REDIS_PORT: "6379"
+          DB_HOST: "{{ db_private_ip }}"
+          DB_PORT: "5432"
+          DB_USERNAME: "{{ postgres_user }}"
+          DB_PASSWORD: "{{ postgres_password }}"
+          DB_NAME: "{{ postgres_db }}"
       when: "'backend' in group_names"
 
     # ────────────────────────────────────────────────
