@@ -3,8 +3,8 @@
 
 services:
   vote:
-    image: cesarboada/vote:latest
- #  build: ./vote
+    # image: cesarboada/vote:latest
+    build: ./vote
     depends_on:
       redis:
         condition: service_healthy 
@@ -14,8 +14,8 @@ services:
       - back-tier
 
   result:
-    image: cesarboada/result:latest
- #  build: ./result
+    # image: cesarboada/result:latest
+    build: ./result
     depends_on:
       db:
         condition: service_healthy 
@@ -25,8 +25,8 @@ services:
       - back-tier
 
   worker:
- #  build: ./worker
-    image: cesarboada/worker:latest
+    build: ./worker
+    # image: cesarboada/worker:latest
     depends_on:
       redis:
         condition: service_healthy 
@@ -50,6 +50,7 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "votes"
     volumes:
       - "db-data:/var/lib/postgresql/data"
       - "./healthchecks:/healthchecks"

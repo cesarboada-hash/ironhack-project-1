@@ -26,3 +26,22 @@ ENV REDIS_HOST=redis
 
 # Define the entry point
 ENTRYPOINT ["dotnet", "Worker.dll"]
+
+# Usa una imagen base ligera con Python
+FROM python:3.11-slim
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copia requirements primero (para cachear dependencias)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia todo el código de la app
+COPY . .
+
+# Expone el puerto interno (Gunicorn escucha en 80)
+EXPOSE 80
+
+# Comando para ejecutar la app con Gunicorn (4 workers, puerto 80)
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:80", "app:app"]
